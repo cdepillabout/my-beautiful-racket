@@ -1,3 +1,6 @@
 #lang reader "stacker.rkt"
-
-efefefef
+8
+3
++
+4
+*
