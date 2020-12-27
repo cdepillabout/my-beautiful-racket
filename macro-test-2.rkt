@@ -69,3 +69,33 @@
 ;;           print-values)
 ;;    )
 ;;   )
+
+(module lambda-calculus racket
+  (provide (rename-out [1-arg-lambda lambda]
+                       [1-arg-app #%app]
+                       [1-form-module-begin #%module-begin]
+                       ;; [no-literals #%datum]
+                       [allow-literals #%datum]
+                       [unbound-as-quoted #%top]))
+  (define-syntax-rule (1-arg-lambda (x) expr)
+    (lambda (x) expr))
+  (define-syntax-rule (1-arg-app e1 e2)
+    (#%app e1 e2))
+  (define-syntax-rule (1-form-module-begin e)
+    (#%module-begin e))
+  ;; (define-syntax (no-literals stx)
+  ;;   (raise-syntax-error #f "no" stx))
+  (define-syntax (allow-literals stx)
+    (syntax-case stx ()
+      ([_ . x] #'x)))
+  (define-syntax-rule (unbound-as-quoted . id)
+    ;; 'id
+    3
+    )
+  )
+
+(module hello (submod ".." lambda-calculus)
+  ((lambda (x) a)
+   100
+   )
+  )
