@@ -86,8 +86,17 @@
   ;; (define-syntax (no-literals stx)
   ;;   (raise-syntax-error #f "no" stx))
   (define-syntax (allow-literals stx)
+    (printf "in lambda-calculus, allow-literals\n")
     (syntax-case stx ()
-      ([_ . x] #'x)))
+      ([_ . x] #'(#%datum . x))))
+      ;; This loops forever for some reason:
+      ;; ([_ . x]
+      ;;  (begin
+      ;;    (printf "in lambda-calculus, allow-literals, in syntax-case match\n")
+      ;;    #'x
+      ;;    )
+      ;;  )
+      ))
   (define-syntax-rule (unbound-as-quoted . id)
     ;; 'id
     3
