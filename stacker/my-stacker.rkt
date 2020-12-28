@@ -53,4 +53,21 @@
      (push-stack! op-result)]
     [else (void)]
     ))
- 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Two ways to turn a symbol ('+) back into a procedure ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Pass a lexical context to datum->syntax.
+((eval (datum->syntax #'true '+)) 3 4)
+
+;; Define a namespace anchor to give to eval.
+(define-namespace-anchor my-namespace-anchor)
+
+(let ([f
+       (parameterize
+           ([current-namespace (namespace-anchor->namespace my-namespace-anchor)])
+         (eval (datum->syntax #false '+)))]
+      )
+  (f 30 40)
+  )
