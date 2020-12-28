@@ -6,7 +6,6 @@
   ;; (define src-datums (format-datums ''(handle ~a) src-lines))
   ;; (define src-datums (format-datums '(handle ~a) src-lines))
   (printf "src-lines: ~v\n" src-lines)
-  ;; (define src-datums (format-datums '(handle ~a) src-lines))
   (define src-datums
     (map (λ (x) `(handle ,(read (open-input-string x)))) src-lines))
   (printf "src-datums: ~v\n" src-datums)
@@ -31,7 +30,9 @@
      ;;#'(+ 1 3)
      )))
 
-(provide (rename-out [stacker-module-begin #%module-begin]) handle * +)
+(provide
+ (rename-out [stacker-module-begin #%module-begin])
+ handle * + #%app #%datum #%top-interaction)
 
 (define stack empty)
 
@@ -44,12 +45,12 @@
   (set! stack (cons arg stack)))
 
 (define (handle [arg #f])
-  (printf "in real handle, arg: ~v\n" arg)
+  ;; (printf "in real handle, arg: ~v\n" arg)
   (cond
     [(number? arg) (push-stack! arg)]
     [(or (equal? * arg) (equal? + arg))
      (define op-result (arg (pop-stack!) (pop-stack!)))
      (push-stack! op-result)]
-    [else '()]
+    [else (void)]
     ))
  
