@@ -96,7 +96,7 @@
       ;;    #'x
       ;;    )
       ;;  )
-      ))
+      ;; ))
   (define-syntax-rule (unbound-as-quoted . id)
     ;; 'id
     3
