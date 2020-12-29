@@ -1,0 +1,7 @@
+#lang racket/base
+
+(provide
+ what
+ )
+
+(define what 3)

@@ -5,10 +5,10 @@
   (define src-lines (port->lines port))
   ;; (define src-datums (format-datums ''(handle ~a) src-lines))
   ;; (define src-datums (format-datums '(handle ~a) src-lines))
-  (printf "src-lines: ~v\n" src-lines)
+  ;; (printf "src-lines: ~v\n" src-lines)
   (define src-datums
     (map (λ (x) `(handle ,(read (open-input-string x)))) src-lines))
-  (printf "src-datums: ~v\n" src-datums)
+  ;; (printf "src-datums: ~v\n" src-datums)
   (define module-datum `(module stacker-mod "my-stacker.rkt"
                           ,@src-datums))
   (datum->syntax #f module-datum))
@@ -19,15 +19,10 @@
   (printf "in stacker-module-begin, stx: ~v\n" stx)
   (syntax-case stx ()
     [(_ handle-expr ...)
-     ;;#'(#%module-begin
-     ;;   handle-expr ...
-     ;;   (display (first stack))
-     ;;   )
      #'(#%module-begin
         handle-expr ...
         (display (first stack))
         )
-     ;;#'(+ 1 3)
      ]))
 
 (provide
@@ -54,20 +49,20 @@
     [else (void)]
     ))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Two ways to turn a symbol ('+) back into a procedure ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; Two ways to turn a symbol ('+) back into a procedure ;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Pass a lexical context to datum->syntax.
-((eval (datum->syntax #'true '+)) 3 4)
+;; ;; Pass a lexical context to datum->syntax.
+;; ((eval (datum->syntax #'true '+)) 3 4)
 
-;; Define a namespace anchor to give to eval.
-(define-namespace-anchor my-namespace-anchor)
+;; ;; Define a namespace anchor to give to eval.
+;; (define-namespace-anchor my-namespace-anchor)
 
-(let ([f
-       (parameterize
-           ([current-namespace (namespace-anchor->namespace my-namespace-anchor)])
-         (eval (datum->syntax #false '+)))]
-      )
-  (f 30 40)
-  )
+;; (let ([f
+;;        (parameterize
+;;            ([current-namespace (namespace-anchor->namespace my-namespace-anchor)])
+;;          (eval (datum->syntax #false '+)))]
+;;       )
+;;   (f 30 40)
+;;   )

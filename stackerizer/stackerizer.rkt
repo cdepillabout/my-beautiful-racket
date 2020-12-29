@@ -3,6 +3,7 @@
 (provide (except-out (all-from-out racket)
                      #%module-begin)
          (rename-out [my-module-begin #%module-begin])
+         (for-syntax convert-expr)
          )
 
 ;; (define-syntax-rule (module-begin expr ...)
