@@ -18,7 +18,7 @@
 (define-syntax (stacker-module-begin stx)
   (printf "in stacker-module-begin, stx: ~v\n" stx)
   (syntax-case stx ()
-    ([_ handle-expr ...]
+    [(_ handle-expr ...)
      ;;#'(#%module-begin
      ;;   handle-expr ...
      ;;   (display (first stack))
@@ -28,7 +28,7 @@
         (display (first stack))
         )
      ;;#'(+ 1 3)
-     )))
+     ]))
 
 (provide
  (rename-out [stacker-module-begin #%module-begin])
