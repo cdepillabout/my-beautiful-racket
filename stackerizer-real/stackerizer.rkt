@@ -42,18 +42,38 @@
 ;;     [(+ fst next ...) #'(list '+ fst (+ next ...))]
 ;;     ))
 
-(define-syntax (define-op stx)
+;; This is a version that defines each op individually.
+;; (define-syntax (define-op stx)
+;;   (syntax-case stx ()
+;;     [(_ op)
+;;      #'(define-syntax (op stxx)
+;;          (syntax-case stxx ()
+;;            [(_ fst) #'fst]
+;;            [(op fst next (... ...))
+;;             #'(list 'op fst (op next (... ...)))
+;;             ]
+;;            )
+;;          )
+;;      ]))
+
+;; (define-op +)
+;; (define-op *)
+
+;; This is a version that defines multiple ops at a time.  Good use of `...`.
+(define-syntax (define-ops stx)
   (syntax-case stx ()
-    [(_ op)
-     #'(define-syntax (op stxx)
-         (syntax-case stxx ()
-           [(_ fst) #'fst]
-           [(op fst next (... ...))
-            #'(list 'op fst (op next (... ...)))
-            ]
+    [(_ op ...)
+     #'(begin
+         (define-syntax (op stxx)
+           (syntax-case stxx ()
+             [(_ fst) #'fst]
+             [(op fst next (... ...))
+              #'(list 'op fst (op next (... ...)))
+              ]
+             )
            )
+         ...
          )
      ]))
 
-(define-op +)
-(define-op *)
+(define-ops + *)
