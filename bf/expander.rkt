@@ -80,6 +80,37 @@
      ]
     ))
 
+(define-syntax (until_ stx)
+
+  ;; A helper function that uses lambdas to defer running stuff.
+  (define (until_helper test-func body-func)
+    (if (test-func)
+        (void)
+        (begin
+          (body-func)
+          (until_helper test-func body-func))))
+
+  (syntax-case stx ()
+    [(_ test body ...)
+     ;; Use a helper function with lambdas to defer stuff from running.
+     ;; #`(#,until_helper (lambda () test) (lambda () body ...))
+
+     ;; This also works:
+     (with-syntax ([until_helper until_helper])
+       #`(until_helper (lambda () test) (lambda () body ...))
+       )
+     ]
+    ))
+
+(define-syntax (my-example stx)
+  (define my-val 3)
+  (syntax-case stx ()
+    [(_ expr ...)
+     #`#,my-val
+     ]
+    ))
+
+
 (define arr (make-vector 30000 0))
 (define ptr 0)
 
