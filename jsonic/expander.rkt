@@ -41,8 +41,14 @@
 (define-syntax (jsonic-sexp stx)
   (syntax-case stx ()
     [(_ sexp-str)
-     (with-syntax ([sexp-datum (read (open-input-string #'sexp-str))])
-       #'(jsexpr->string sexp-datum))
+     ;; (printf "jsonic-sexp, sexp-str: ~v\n" (syntax->datum #'sexp-str))
+     (begin
+       (define raw-sexp-str (syntax->datum #'sexp-str))
+       (define raw-datum (read (open-input-string raw-sexp-str)))
+       (with-syntax ([sexp-datum raw-datum])
+         #'(jsexpr->string sexp-datum)
+         )
+       )
      ]))
 
 (provide jsonic-sexp)
